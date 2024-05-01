@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D  # Import Axes3D module for 3D plotting
+
 
 def lorenz(t, xyz, sigma, rho, beta):
     x, y, z = xyz
@@ -15,7 +17,7 @@ rho = 28.0
 beta = 8.0 / 3.0
 
 # Initial conditions
-xyz0 = [0.1, 0.0, 0.0]
+xyz0 = [0.001, 0.0, 0.0]
 
 # Time span
 t_span = (0, 100)
