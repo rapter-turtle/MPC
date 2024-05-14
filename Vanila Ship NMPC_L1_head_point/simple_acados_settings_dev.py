@@ -92,7 +92,7 @@ def acados_settings(Tf, N):
     )
     ocp.constraints.uh = np.array(
         [
-            2,
+            1,
         ]
     )
 

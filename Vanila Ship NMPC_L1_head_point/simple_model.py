@@ -125,7 +125,7 @@ def simple_model():
 
 
     # Define initial conditions
-    model.x0 = np.array([0, 0, 0, -10, -10, 0, 0, 0])
+    model.x0 = np.array([0, 0, 0, -10, 0, 0, 0, 0])
 
     back_y = y - 2*l*sin(psi)
 

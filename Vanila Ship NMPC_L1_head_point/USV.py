@@ -59,7 +59,7 @@ def update_state(x_t, u, dt, V, V_t,t):
 
     V_y = V_t[1]
 
-    V_y += 0.7*(10*math.cos(10*t)*math.cos(0.1*t) - 0.1*math.sin(10*t)*math.sin(0.1*t))
+    V_y += (3*math.cos(3*t)*math.cos(0.1*t) - 0.1*math.sin(3*t)*math.sin(0.1*t))
 
     V_t[1] = V_y
 
@@ -74,7 +74,20 @@ def update_state(x_t, u, dt, V, V_t,t):
     if real_psi < -math.pi:
         x_t_plus_1[5] += 2*math.pi
         
+    
+    if x_t_plus_1[6] > 799.999:
+        x_t_plus_1[6] = 799.99
+    if x_t_plus_1[6] < -799.999:
+        x_t_plus_1[6] = -799.99
+
+    if x_t_plus_1[7] > 199.999:
+        x_t_plus_1[7] = 199.99
+    if x_t_plus_1[7] < -199.999:
+        x_t_plus_1[7] = -199.99
 
 
-    return x_t_plus_1
+
+    V_ship = np.array([1, V_y, 0])
+
+    return x_t_plus_1, V_ship
 
