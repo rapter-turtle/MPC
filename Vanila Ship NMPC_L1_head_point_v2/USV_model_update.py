@@ -48,7 +48,13 @@ def estim_update_state(x_t, x_error,  u, dt, param_estim,t):
 
     M_inv = np.linalg.inv(M)
 
-    Tau = np.array([Tau_x, Tau_y, 4*Tau_y])
+
+    px = param_estim[0]
+    py = param_estim[1]
+    # l1_u[0] = -(py*math.sin(psi) + px*math.cos(psi))*m
+    l1_y = -(py*math.cos(psi) - px*math.sin(psi))/(1/m + 4*l/Iz)
+
+    Tau = np.array([Tau_x, Tau_y, 4*(Tau_y + l1_y)])
     r_uvr_dot_bM = (Tau - np.dot(Cv, uvr) - np.dot(D, uvr))
     r_uvr_dot = np.dot(M_inv, r_uvr_dot_bM)
 

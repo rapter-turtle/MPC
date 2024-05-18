@@ -49,8 +49,8 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
 
     l = 3.5
 
-    disturbance_x = (0.0*math.sin(psi) + 0.03*math.cos(psi))*m
-    disturbance_y = (0.0*math.cos(psi) - 0.03*math.sin(psi))*m
+    disturbance_x = (0.02*math.sin(psi) + 0.03*math.cos(psi))*m
+    disturbance_y = (0.02*math.cos(psi) - 0.03*math.sin(psi))*m
     
     print(l1_u[0] + disturbance_x)
     print( l1_u[1] + disturbance_y)

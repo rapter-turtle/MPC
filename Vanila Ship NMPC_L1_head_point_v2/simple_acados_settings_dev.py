@@ -45,7 +45,7 @@ def acados_settings(Tf, N):
 
     
     # set cost
-    Q = np.diag([ 0, 0, 1e-3, 1e-4, 1e-4, 1e-1, 1e-20, 1e-20 ])
+    Q = np.diag([ 0, 0, 1e-3, 1e-4, 1e-4, 0, 1e-20, 1e-20 ])
 
     R = np.eye(nu)
     R[0, 0] = 0

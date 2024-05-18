@@ -11,7 +11,7 @@ fig, ax = plt.subplots()
 
 Tf = 30.0  # prediction horizon
 N = 30  # number of discretization steps
-T = 100  # maximum simulation time[s]
+T = 200  # maximum simulation time[s]
 dt = 0.001
 control_time = 1
 
