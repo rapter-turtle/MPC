@@ -414,7 +414,7 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     // change only the non-zero elements:
     W_0[0+(NY0) * 0] = 0.001;
     W_0[1+(NY0) * 1] = 0.001;
-    W_0[2+(NY0) * 2] = 0.1;
+    W_0[2+(NY0) * 2] = 1;
     W_0[3+(NY0) * 3] = 0.0001;
     W_0[4+(NY0) * 4] = 0.001;
     W_0[6+(NY0) * 6] = 0.00000000000000000001;
@@ -449,7 +449,7 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     // change only the non-zero elements:
     W[0+(NY) * 0] = 0.001;
     W[1+(NY) * 1] = 0.001;
-    W[2+(NY) * 2] = 0.1;
+    W[2+(NY) * 2] = 1;
     W[3+(NY) * 3] = 0.0001;
     W[4+(NY) * 4] = 0.001;
     W[6+(NY) * 6] = 0.00000000000000000001;
@@ -495,7 +495,7 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     // change only the non-zero elements:
     W_e[0+(NYN) * 0] = 0.001;
     W_e[1+(NYN) * 1] = 0.001;
-    W_e[2+(NYN) * 2] = 0.1;
+    W_e[2+(NYN) * 2] = 1;
     W_e[3+(NYN) * 3] = 0.0001;
     W_e[4+(NYN) * 4] = 0.001;
     W_e[6+(NYN) * 6] = 0.00000000000000000001;
@@ -525,42 +525,42 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     double* zl = zlumem+NS*2;
     double* zu = zlumem+NS*3;
     // change only the non-zero elements:
-    Zl[0] = 1;
-    Zl[1] = 1;
-    Zl[2] = 1;
-    Zl[3] = 1;
-    Zl[4] = 1;
-    Zl[5] = 1;
-    Zl[6] = 1;
-    Zl[7] = 1;
-    Zl[8] = 1;
-    Zu[0] = 1;
-    Zu[1] = 1;
-    Zu[2] = 1;
-    Zu[3] = 1;
-    Zu[4] = 1;
-    Zu[5] = 1;
-    Zu[6] = 1;
-    Zu[7] = 1;
-    Zu[8] = 1;
-    zl[0] = 100;
-    zl[1] = 100;
-    zl[2] = 100;
-    zl[3] = 100;
-    zl[4] = 100;
-    zl[5] = 100;
-    zl[6] = 100;
-    zl[7] = 100;
-    zl[8] = 100;
-    zu[0] = 100;
-    zu[1] = 100;
-    zu[2] = 100;
-    zu[3] = 100;
-    zu[4] = 100;
-    zu[5] = 100;
-    zu[6] = 100;
-    zu[7] = 100;
-    zu[8] = 100;
+    Zl[0] = 100;
+    Zl[1] = 100;
+    Zl[2] = 100;
+    Zl[3] = 100;
+    Zl[4] = 100;
+    Zl[5] = 100;
+    Zl[6] = 100;
+    Zl[7] = 100;
+    Zl[8] = 100;
+    Zu[0] = 100;
+    Zu[1] = 100;
+    Zu[2] = 100;
+    Zu[3] = 100;
+    Zu[4] = 100;
+    Zu[5] = 100;
+    Zu[6] = 100;
+    Zu[7] = 100;
+    Zu[8] = 100;
+    zl[0] = 10000;
+    zl[1] = 10000;
+    zl[2] = 10000;
+    zl[3] = 10000;
+    zl[4] = 10000;
+    zl[5] = 10000;
+    zl[6] = 10000;
+    zl[7] = 10000;
+    zl[8] = 10000;
+    zu[0] = 10000;
+    zu[1] = 10000;
+    zu[2] = 10000;
+    zu[3] = 10000;
+    zu[4] = 10000;
+    zu[5] = 10000;
+    zu[6] = 10000;
+    zu[7] = 10000;
+    zu[8] = 10000;
 
     for (int i = 1; i < N; i++)
     {
@@ -593,6 +593,8 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     // change only the non-zero elements:
     lbx0[3] = -10;
     ubx0[3] = -10;
+    lbx0[4] = -10;
+    ubx0[4] = -10;
 
     ocp_nlp_constraints_model_set(nlp_config, nlp_dims, nlp_in, 0, "idxbx", idxbx0);
     ocp_nlp_constraints_model_set(nlp_config, nlp_dims, nlp_in, 0, "lbx", lbx0);
@@ -683,8 +685,8 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     double* lsh = lush;
     double* ush = lush + NSH;
     
-    lsh[0] = -50;
-    ush[0] = 50;
+    lsh[0] = -10000;
+    ush[0] = 2;
 
     for (int i = 1; i < N; i++)
     {
@@ -720,9 +722,9 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     lbx[2] = -1000;
     ubx[2] = 1000;
     lbx[3] = -10000000;
-    ubx[3] = 20;
+    ubx[3] = 1;
     lbx[4] = -10000000;
-    ubx[4] = 20;
+    ubx[4] = 1;
     lbx[5] = -1.2217177777777777;
     ubx[5] = 1.2217177777777777;
     lbx[6] = -800;
@@ -751,7 +753,7 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     lh[0] = -1000;
 
     
-    uh[0] = 2;
+    uh[0] = 1;
 
     for (int i = 1; i < N; i++)
     {
@@ -906,6 +908,7 @@ void simple_model_acados_create_7_set_nlp_out(simple_model_solver_capsule* capsu
     // initialize with x0
     
     x0[3] = -10;
+    x0[4] = -10;
 
 
     double* u0 = xu0 + NX;

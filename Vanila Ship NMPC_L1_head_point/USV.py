@@ -1,7 +1,7 @@
 import numpy as np
 import math 
 
-def update_state(x_t, u, l1_u, dt, V, V_t,t):
+def update_state(x_t, u, l1_u, dt, V, V_t, t):
 
 
     m = 3980
@@ -54,25 +54,42 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     # disturbance_y = (paramy*math.cos(psi) - paramx*math.sin(psi))*m
 
     disturbance_x = 0.0
-    disturbance_y = 0.5625*math.sin(0.75*t)*m  
+    disturbance_y = 0.1*math.sin(0.75*t)*m  
 
     # l1_u = np.array([-(0.0*math.sin(psi) - 0.01*math.sin(0.1*i*dt)*math.cos(psi))*m,-(0.0*math.cos(psi) + 0.01*math.sin(i*dt*0.1)*math.sin(psi))/(1/m + 4*l/Iz)])
     
     # print(l1_u[0] + disturbance_x)
     # print( l1_u[1] + disturbance_y)
 
-    Tau = np.array([Tau_x  + l1_u[0] + disturbance_x, Tau_y + l1_u[1] + disturbance_y, -4*(Tau_y+ l1_u[1])])
-    Tau = Tau + np.array([u[0], u[1], -4*u[1]])*dt
+    Tau_bef = np.array([Tau_x, Tau_y, -4*Tau_y])
 
-    if Tau[0] > 799.999:
-        Tau[0] = 799.99
-    if Tau[0] < -799.999:
-        Tau[0] = -799.99
+    con_Tau = np.array([Tau_x + l1_u[0], Tau_y + l1_u[1] , -4*(Tau_y + l1_u[1])]) + np.array([u[0], u[1], -4*u[1]])*dt
 
-    if Tau[1] > 199.999:
-        Tau[1] = 199.99
-    if Tau[1] < -199.999:
-        Tau[1] = -199.99
+
+    # if con_Tau[0] - Tau_bef[0] > 1000*dt:
+    #     con_Tau[0] = Tau_bef[0] + 1000*dt
+    # if con_Tau[0] - Tau_bef[0] < -1000*dt:
+    #     con_Tau[0] = Tau_bef[0] - 1000*dt
+    # if con_Tau[1] - Tau_bef[1] > 1000*dt:
+    #     con_Tau[1] = Tau_bef[1] + 1000*dt
+    # if con_Tau[1] - Tau_bef[1] < -1000*dt:
+    #     con_Tau[1] = Tau_bef[1] - 1000*dt
+
+    if con_Tau[0] > 799.999:
+        con_Tau[0] = 799.99
+    if con_Tau[0] < -799.999:
+        con_Tau[0] = -799.99
+
+    if con_Tau[1] > 199.999:
+        con_Tau[1] = 199.99
+    if con_Tau[1] < -199.999:
+        con_Tau[1] = -199.99
+
+
+    Tau = np.array([con_Tau[0] + disturbance_x, con_Tau[1] + disturbance_y, -4*(con_Tau[1])])
+    # Tau = Tau + np.array([u[0], u[1], -4*u[1]])*dt
+
+    
 
     M_inv = np.linalg.inv(M)
 
@@ -84,7 +101,7 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     V_y = V_t[1]
 
 
-    # V_y = (0.1*math.cos(0.1*t))
+    # V_y = 0.75*math.sin(0.75*t)
     V_t[1] = V_y
 
     xdot = np.concatenate((uvr_dot, xypsi_dot, u, V_t), axis=0)
@@ -113,5 +130,5 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
 
     V_ship = np.array([1.0, V_y, 0.0])
 
-    return x_t_plus_1, V_ship
+    return x_t_plus_1, V_ship, con_Tau
 

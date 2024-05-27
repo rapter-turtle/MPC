@@ -63,7 +63,7 @@
 #define SIMPLE_MODEL_NY0    10
 #define SIMPLE_MODEL_NY     10
 #define SIMPLE_MODEL_NYN    8
-#define SIMPLE_MODEL_N      50
+#define SIMPLE_MODEL_N      30
 #define SIMPLE_MODEL_NH     1
 #define SIMPLE_MODEL_NHN    0
 #define SIMPLE_MODEL_NH0    0

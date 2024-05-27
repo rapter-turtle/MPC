@@ -41,10 +41,10 @@ def acados_settings(Tf, N):
     ns = nsh + nsbx
     
 
-    ocp.cost.zl = 100 * np.ones((ns,))
-    ocp.cost.zu = 100 * np.ones((ns,))
-    ocp.cost.Zl = 1 * np.ones((ns,))
-    ocp.cost.Zu = 1 * np.ones((ns,))
+    ocp.cost.zl = 10000 * np.ones((ns,))
+    ocp.cost.zu = 10000 * np.ones((ns,))
+    ocp.cost.Zl = 100 * np.ones((ns,))
+    ocp.cost.Zu = 100 * np.ones((ns,))
 
 
     # discretization
@@ -52,7 +52,7 @@ def acados_settings(Tf, N):
 
     
     # set cost
-    Q = np.diag([ 1e-3, 1e-3, 1e-1, 1e-4, 1e-3, 0, 1e-20, 1e-20 ])
+    Q = np.diag([ 1e-3, 1e-3, 1, 1e-4, 1e-3, 0, 1e-20, 1e-20 ])
 
     R = np.eye(nu)
     R[0, 0] = 0
@@ -87,7 +87,7 @@ def acados_settings(Tf, N):
     angle = 70*3.14156/180
     # setting constraints
     ocp.constraints.lbx = np.array([-1000, -1000,-1000, -10000000, -10000000, -angle, -800, -200])
-    ocp.constraints.ubx = np.array([ 1000, 1000, 1000, 20 ,20, angle, 800, 200])
+    ocp.constraints.ubx = np.array([ 1000, 1000, 1000, 1 ,1, angle, 800, 200])
     ocp.constraints.idxbx = np.array([0, 1, 2, 3, 4, 5, 6, 7])   
     ocp.constraints.lbu = np.array([-50, -50 ])
     ocp.constraints.ubu = np.array([50, 50])
@@ -100,7 +100,7 @@ def acados_settings(Tf, N):
     )
     ocp.constraints.uh = np.array(
         [
-            2,
+            1,
         ]
     )
 
@@ -108,8 +108,8 @@ def acados_settings(Tf, N):
     ocp.constraints.usbx = np.zeros([nsbx])
     ocp.constraints.idxsbx = np.array(range(nsbx))
 
-    ocp.constraints.lsh = np.array([-50 ])
-    ocp.constraints.ush = np.array([50 ])
+    ocp.constraints.lsh = np.array([-10000 ])
+    ocp.constraints.ush = np.array([2 ])
     ocp.constraints.idxsh = np.array([0])
 
 

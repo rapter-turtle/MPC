@@ -124,7 +124,7 @@ def simple_model():
 
 
     x_pos = 10.0
-    y_pos = 0.0
+    y_pos = 10.0
     # Define initial conditions
     model.x0 = np.array([0, 0, 0, -x_pos, -y_pos, 0, 0, 0])
 

@@ -7,11 +7,12 @@ from simple_acados_settings_dev import *
 from simple_plotFcn import *
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots()
+# fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(12, 8))
 
-Tf = 50.0  # prediction horizon
-N = 50  # number of discretization steps
-T = 200  # maximum simulation time[s]
+Tf = 30.0  # prediction horizon
+N = 30  # number of discretization steps
+T = 120  # maximum simulation time[s]
 dt = 0.001
 control_time = 1
 
@@ -31,7 +32,7 @@ simX = np.ndarray((int(T/dt), nx+3))
 simU = np.ndarray((int(T/dt), nu))
 
 x_pos = 10.0
-y_pos = 0.0
+y_pos = 10.0
 
 x_init = model.x0
 state = np.array([0, 0, 0, 0, 0, 0, 0, 0, 10, y_pos, 0])
@@ -59,6 +60,7 @@ sim_param = np.ndarray((int(T/dt),3))
 sim_l1_con = np.ndarray((int(T/dt),2))
 real = np.ndarray((int(T/dt),6))
 sim_filtered = np.ndarray((int(T/dt),3))
+sim_real_con = np.ndarray((int(T/dt),3))
 
 px = 0.0
 py = 0.0
@@ -104,17 +106,17 @@ for i in range(int(T/dt)):
         current_plot(horizon, ax, round(i*dt,2), state)     
 
 
-    # l1_u = np.array([0,0])
-    state, V_ship = update_state(state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
+    l1_u = np.array([0,0])
+    state, V_ship, real_con = update_state(state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
 
     
     x0 = np.array([state[0], state[1], state[2], state[3] + l*math.cos(state[5]) - state[8], state[4] + l*math.sin(state[5]) - state[9], state[5], state[6], state[7]])
 
     ############################## L1 Adaptive control ######################################
-    Gamma_x = 100000
-    Gamma_y = 100000
+    Gamma_x = 1000000
+    Gamma_y = 1000000
     Gamma_psi = 100000
-    w_cutoff = 50
+    w_cutoff = 30
 
     u_mpc = np.array([state[6], state[7]])
     x_estim =  estim_update_state(x_estim_before, x_error, u_mpc, filtered_param, dt, np.array([px, py, ppsi]), i*dt) #+ np.dot(Am, x_error)  
@@ -160,6 +162,7 @@ for i in range(int(T/dt)):
     sim_x_estim_error[i,:] = x_estim
     real[i,:] = x_l1
     sim_filtered[i,:] = -filtered_param
+    sim_real_con[i,:] = real_con
 
     # disturbance_x = 0.0
     # disturbance_y = 0.5625*math.sin(0.75*t)*m  
@@ -190,7 +193,7 @@ for i in range(int(T/dt)):
 
 # Plot Results
 t = np.linspace(0.0, T, int(T/dt))
-plotRes(simX, simU, t, sim_l1_con, sim_param, sim_x_estim_error, real, sim_filtered)
+plotRes(simX, simU, t, sim_l1_con, sim_param, sim_x_estim_error, real, sim_filtered, sim_real_con)
 plotTrackProj(sim_x_estim_error, simX, int(T/dt),t)
 # current_estim_plot(current, t)
 
