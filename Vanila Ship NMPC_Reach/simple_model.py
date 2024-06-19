@@ -116,21 +116,44 @@ def simple_model():
     # dynamics
     f_expl = vertcat(
         uvr_dot,
-        uu*cos(psi) - v*sin(psi) - r*l*sin(psi) - 1,
-        uu*sin(psi) + v*cos(psi) + r*l*cos(psi),
+        1 - uu*cos(psi) + v*sin(psi) + r*l*sin(psi),
+        -uu*sin(psi) - v*cos(psi) - r*l*cos(psi),
         r,
         u
     )
 
 
-    x_pos = 10.0
-    y_pos = 0.0
+    x_pos = 4.0
+    y_pos = 2.0
     # Define initial conditions
-    model.x0 = np.array([0, 0, 0, -x_pos, -y_pos, 0, 0, 0])
+    model.x0 = np.array([0, 0, 0, x_pos, y_pos, 0, 0, 0])
 
-    back_y = y - 2*l*sin(psi)
 
-    constraint.expr = vertcat(back_y)
+
+    model_data = np.load('gp_model_data.npz')
+
+    # Extract the saved model components
+    X_train = model_data['X_train']
+    y_train = model_data['y_train']
+    L = model_data['L']
+    alpha = model_data['alpha']
+    length_scale = model_data['length_scale'].item()
+    variance = model_data['variance'].item()
+    sigma_n = model_data['sigma_n'][0]
+    K_train = model_data['K_train']
+
+
+    n2 = X_train.shape[0]
+
+    K= MX.zeros(n2)
+    X_new = vertcat(xx, y, psi, uu, r)
+    for i in range(n2):
+        diff = X_new - X_train[i, :]
+        sqdist = dot(diff,diff)
+        K[i] =  variance * exp(-0.5 * sqdist / length_scale**2)
+
+    mu = dot(K, K_train)
+    constraint.expr = vertcat(mu)
 
 
     # Define model struct

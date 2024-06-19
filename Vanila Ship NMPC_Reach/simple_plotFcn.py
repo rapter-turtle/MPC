@@ -147,8 +147,8 @@ def current_plot(x, ax, t, state):
     ax.add_patch(ship_polygon)
 
     # Plot the trajectory of (x, y) for the prediction horizon
-    predicted_horizon_x = [sub_list[3] for sub_list in x]
-    predicted_horizon_y = [sub_list[4] for sub_list in x]
+    predicted_horizon_x = [-sub_list[3] for sub_list in x]
+    predicted_horizon_y = [-sub_list[4] for sub_list in x]
     ax.plot(predicted_horizon_x -np.cos(state[5]) + state[8], predicted_horizon_y -np.sin(state[5])  + state[9], 'r-', label='Predicted Horizon')
     # Add labels and legend
     ax.grid(True)

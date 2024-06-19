@@ -52,7 +52,7 @@ def acados_settings(Tf, N):
 
     
     # set cost
-    Q = np.diag([ 1e-3, 1e-3, 1e-1, 1e-4, 1e-3, 0, 1e-20, 1e-20 ])
+    Q = np.diag([ 1e-3, 1e-2, 1e-4, 1e-4, 1e-3, 0, 1e-20, 1e-20 ])
 
     R = np.eye(nu)
     R[0, 0] = 0
@@ -86,8 +86,8 @@ def acados_settings(Tf, N):
 
     angle = 70*3.14156/180
     # setting constraints
-    ocp.constraints.lbx = np.array([-1000, -1000,-1000, -10000000, -10000000, -angle, -800, -200])
-    ocp.constraints.ubx = np.array([ 1000, 1000, 1000, 20 ,20, angle, 800, 200])
+    ocp.constraints.lbx = np.array([-1000, -1000,-1000, -2, -2, -angle, -800, -200])
+    ocp.constraints.ubx = np.array([ 1000, 1000, 1000, 10000000 ,10000000, angle, 800, 200])
     ocp.constraints.idxbx = np.array([0, 1, 2, 3, 4, 5, 6, 7])   
     ocp.constraints.lbu = np.array([-50, -50 ])
     ocp.constraints.ubu = np.array([50, 50])
@@ -95,12 +95,12 @@ def acados_settings(Tf, N):
 
     ocp.constraints.lh = np.array(
         [
-            -1000,
+            -100000,
         ]
     )
     ocp.constraints.uh = np.array(
         [
-            2,
+            0,
         ]
     )
 
@@ -130,7 +130,7 @@ def acados_settings(Tf, N):
     ocp.solver_options.sim_method_num_stages = 4
     ocp.solver_options.sim_method_num_steps = 3
     # ocp.solver_options.nlp_solver_step_length = 0.05
-    ocp.solver_options.nlp_solver_max_iter = 50
+    ocp.solver_options.nlp_solver_max_iter = 100
     ocp.solver_options.tol = 1e-4
     # ocp.solver_options.nlp_solver_tol_comp = 1e-1
 

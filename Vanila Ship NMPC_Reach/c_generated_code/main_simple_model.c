@@ -43,6 +43,7 @@
 #include "blasfeo/include/blasfeo_d_aux_ext_dep.h"
 
 #define NX     SIMPLE_MODEL_NX
+#define NP     SIMPLE_MODEL_NP
 #define NU     SIMPLE_MODEL_NU
 #define NBX0   SIMPLE_MODEL_NBX0
 
@@ -79,10 +80,10 @@ int main()
     ubx0[1] = 0;
     lbx0[2] = 0;
     ubx0[2] = 0;
-    lbx0[3] = -10;
-    ubx0[3] = -10;
-    lbx0[4] = 0;
-    ubx0[4] = 0;
+    lbx0[3] = 4;
+    ubx0[3] = 4;
+    lbx0[4] = 2;
+    ubx0[4] = 2;
     lbx0[5] = 0;
     ubx0[5] = 0;
     lbx0[6] = 0;

@@ -74,7 +74,7 @@ int simple_model_acados_sim_create(simple_model_sim_solver_capsule * capsule)
     bool tmp_bool;
 
     
-    double Tsim = 1;
+    double Tsim = 0.5;
 
     
     // explicit ode

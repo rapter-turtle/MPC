@@ -186,7 +186,7 @@ ocp_nlp_dims* simple_model_acados_create_2_create_and_set_dimensions(simple_mode
     /************************************************
     *  dimensions
     ************************************************/
-    #define NINTNP1MEMS 17
+    #define NINTNP1MEMS 18
     int* intNp1mem = (int*)malloc( (N+1)*sizeof(int)*NINTNP1MEMS );
 
     int* nx    = intNp1mem + (N+1)*0;
@@ -206,6 +206,7 @@ ocp_nlp_dims* simple_model_acados_create_2_create_and_set_dimensions(simple_mode
     int* ny    = intNp1mem + (N+1)*14;
     int* nr    = intNp1mem + (N+1)*15;
     int* nbxe  = intNp1mem + (N+1)*16;
+    int* np  = intNp1mem + (N+1)*17;
 
     for (int i = 0; i < N+1; i++)
     {
@@ -229,6 +230,7 @@ ocp_nlp_dims* simple_model_acados_create_2_create_and_set_dimensions(simple_mode
         nphi[i]   = NPHI;
         nr[i]     = NR;
         nbxe[i]   = 0;
+        np[i]     = NP;
     }
 
     // for initial state
@@ -270,6 +272,7 @@ ocp_nlp_dims* simple_model_acados_create_2_create_and_set_dimensions(simple_mode
     ocp_nlp_dims_set_opt_vars(nlp_config, nlp_dims, "nu", nu);
     ocp_nlp_dims_set_opt_vars(nlp_config, nlp_dims, "nz", nz);
     ocp_nlp_dims_set_opt_vars(nlp_config, nlp_dims, "ns", ns);
+    ocp_nlp_dims_set_opt_vars(nlp_config, nlp_dims, "np", np);
 
     for (int i = 0; i <= N; i++)
     {
@@ -370,6 +373,8 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     ocp_nlp_config* nlp_config = capsule->nlp_config;
     ocp_nlp_dims* nlp_dims = capsule->nlp_dims;
 
+    int tmp_int = 0;
+
     /************************************************
     *  nlp_in
     ************************************************/
@@ -384,7 +389,7 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
         simple_model_acados_update_time_steps(capsule, N, new_time_steps);
     }
     else
-    {double time_step = 1;
+    {double time_step = 0.5;
         for (int i = 0; i < N; i++)
         {
             ocp_nlp_in_set(nlp_config, nlp_dims, nlp_in, i, "Ts", &time_step);
@@ -407,13 +412,13 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
 
    double* W_0 = calloc(NY0*NY0, sizeof(double));
     // change only the non-zero elements:
-    W_0[0+(NY0) * 0] = 0.001;
-    W_0[1+(NY0) * 1] = 0.001;
-    W_0[2+(NY0) * 2] = 0.1;
-    W_0[3+(NY0) * 3] = 0.0001;
-    W_0[4+(NY0) * 4] = 0.001;
-    W_0[6+(NY0) * 6] = 0.00000000000000000001;
-    W_0[7+(NY0) * 7] = 0.00000000000000000001;
+    W_0[0+(NY0) * 0] = 0.002;
+    W_0[1+(NY0) * 1] = 0.02;
+    W_0[2+(NY0) * 2] = 0.0002;
+    W_0[3+(NY0) * 3] = 0.0002;
+    W_0[4+(NY0) * 4] = 0.002;
+    W_0[6+(NY0) * 6] = 0.00000000000000000002;
+    W_0[7+(NY0) * 7] = 0.00000000000000000002;
     ocp_nlp_cost_model_set(nlp_config, nlp_dims, nlp_in, 0, "W", W_0);
     free(W_0);
     double* Vx_0 = calloc(NY0*NX, sizeof(double));
@@ -442,13 +447,13 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     free(yref);
     double* W = calloc(NY*NY, sizeof(double));
     // change only the non-zero elements:
-    W[0+(NY) * 0] = 0.001;
-    W[1+(NY) * 1] = 0.001;
-    W[2+(NY) * 2] = 0.1;
-    W[3+(NY) * 3] = 0.0001;
-    W[4+(NY) * 4] = 0.001;
-    W[6+(NY) * 6] = 0.00000000000000000001;
-    W[7+(NY) * 7] = 0.00000000000000000001;
+    W[0+(NY) * 0] = 0.002;
+    W[1+(NY) * 1] = 0.02;
+    W[2+(NY) * 2] = 0.0002;
+    W[3+(NY) * 3] = 0.0002;
+    W[4+(NY) * 4] = 0.002;
+    W[6+(NY) * 6] = 0.00000000000000000002;
+    W[7+(NY) * 7] = 0.00000000000000000002;
 
     for (int i = 1; i < N; i++)
     {
@@ -488,13 +493,13 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
 
     double* W_e = calloc(NYN*NYN, sizeof(double));
     // change only the non-zero elements:
-    W_e[0+(NYN) * 0] = 0.001;
-    W_e[1+(NYN) * 1] = 0.001;
-    W_e[2+(NYN) * 2] = 0.1;
-    W_e[3+(NYN) * 3] = 0.0001;
-    W_e[4+(NYN) * 4] = 0.001;
-    W_e[6+(NYN) * 6] = 0.00000000000000000001;
-    W_e[7+(NYN) * 7] = 0.00000000000000000001;
+    W_e[0+(NYN) * 0] = 0.0005;
+    W_e[1+(NYN) * 1] = 0.005;
+    W_e[2+(NYN) * 2] = 0.00005;
+    W_e[3+(NYN) * 3] = 0.00005;
+    W_e[4+(NYN) * 4] = 0.0005;
+    W_e[6+(NYN) * 6] = 0.000000000000000000005;
+    W_e[7+(NYN) * 7] = 0.000000000000000000005;
     ocp_nlp_cost_model_set(nlp_config, nlp_dims, nlp_in, N, "W", W_e);
     free(W_e);
     double* Vx_e = calloc(NYN*NX, sizeof(double));
@@ -586,8 +591,10 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     double* lbx0 = lubx0;
     double* ubx0 = lubx0 + NBX0;
     // change only the non-zero elements:
-    lbx0[3] = -10;
-    ubx0[3] = -10;
+    lbx0[3] = 4;
+    ubx0[3] = 4;
+    lbx0[4] = 2;
+    ubx0[4] = 2;
 
     ocp_nlp_constraints_model_set(nlp_config, nlp_dims, nlp_in, 0, "idxbx", idxbx0);
     ocp_nlp_constraints_model_set(nlp_config, nlp_dims, nlp_in, 0, "lbx", lbx0);
@@ -714,10 +721,10 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     ubx[1] = 1000;
     lbx[2] = -1000;
     ubx[2] = 1000;
-    lbx[3] = -10000000;
-    ubx[3] = 20;
-    lbx[4] = -10000000;
-    ubx[4] = 20;
+    lbx[3] = -2;
+    ubx[3] = 10000000;
+    lbx[4] = -2;
+    ubx[4] = 10000000;
     lbx[5] = -1.2217177777777777;
     ubx[5] = 1.2217177777777777;
     lbx[6] = -800;
@@ -743,10 +750,9 @@ void simple_model_acados_create_5_set_nlp_in(simple_model_solver_capsule* capsul
     double* uh = luh + NH;
 
     
-    lh[0] = -1000;
+    lh[0] = -100000;
 
     
-    uh[0] = 2;
 
     for (int i = 1; i < N; i++)
     {
@@ -794,7 +800,13 @@ void simple_model_acados_create_6_set_opts(simple_model_solver_capsule* capsule)
 
 int fixed_hess = 0;
     ocp_nlp_solver_opts_set(nlp_config, nlp_opts, "fixed_hess", &fixed_hess);
-    ocp_nlp_solver_opts_set(nlp_config, nlp_opts, "globalization", "fixed_step");int full_step_dual = 0;
+    ocp_nlp_solver_opts_set(nlp_config, nlp_opts, "globalization", "fixed_step");int with_solution_sens_wrt_params = false;
+    ocp_nlp_solver_opts_set(nlp_config, capsule->nlp_opts, "with_solution_sens_wrt_params", &with_solution_sens_wrt_params);
+
+    int with_value_sens_wrt_params = false;
+    ocp_nlp_solver_opts_set(nlp_config, capsule->nlp_opts, "with_value_sens_wrt_params", &with_value_sens_wrt_params);
+
+    int full_step_dual = 0;
     ocp_nlp_solver_opts_set(nlp_config, capsule->nlp_opts, "full_step_dual", &full_step_dual);
 
     // set collocation type (relevant for implicit integrators)
@@ -854,7 +866,7 @@ int fixed_hess = 0;
     double nlp_solver_tol_comp = 0.0001;
     ocp_nlp_solver_opts_set(nlp_config, nlp_opts, "tol_comp", &nlp_solver_tol_comp);
 
-    int nlp_solver_max_iter = 50;
+    int nlp_solver_max_iter = 100;
     ocp_nlp_solver_opts_set(nlp_config, nlp_opts, "max_iter", &nlp_solver_max_iter);
 
     int initialize_t_slacks = 0;
@@ -894,7 +906,8 @@ void simple_model_acados_create_7_set_nlp_out(simple_model_solver_capsule* capsu
 
     // initialize with x0
     
-    x0[3] = -10;
+    x0[3] = 4;
+    x0[4] = 2;
 
 
     double* u0 = xu0 + NX;
@@ -1179,7 +1192,7 @@ void simple_model_acados_print_stats(simple_model_solver_capsule* capsule)
     ocp_nlp_get(capsule->nlp_config, capsule->nlp_solver, "stat_m", &stat_m);
 
     
-    double stat[600];
+    double stat[1200];
     ocp_nlp_get(capsule->nlp_config, capsule->nlp_solver, "statistics", stat);
 
     int nrow = sqp_iter+1 < stat_m ? sqp_iter+1 : stat_m;

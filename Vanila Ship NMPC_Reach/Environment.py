@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots()
 
-Tf = 50.0  # prediction horizon
+Tf = 25.0  # prediction horizon
 N = 50  # number of discretization steps
-T = 100  # maximum simulation time[s]
+T = 150  # maximum simulation time[s]
 dt = 0.001
-control_time = 1
+control_time = 0.5
 
 
 
@@ -30,11 +30,11 @@ Nsim = int(T * N / Tf)
 simX = np.ndarray((int(T/dt), nx+3))
 simU = np.ndarray((int(T/dt), nu))
 
-x_pos = 10.0
-y_pos = 0.0
+x_pos = 4.0
+y_pos =2.0
 
 x_init = model.x0
-state = np.array([0, 0, 0, 0, 0, 0, 0, 0, 10, y_pos, 0])
+state = np.array([0, 0, 0, 0, 0, 0, 0, 0, x_pos, y_pos, 0])
 state_before = state
 x0 = x_init
 x0_before = x0
@@ -104,11 +104,39 @@ for i in range(int(T/dt)):
         current_plot(horizon, ax, round(i*dt,2), state)     
 
 
+
+        model_data = np.load('gp_model_data.npz')
+
+        # Extract the saved model components
+        X_train = model_data['X_train']
+        y_train = model_data['y_train']
+        L = model_data['L']
+        alpha = model_data['alpha']
+        length_scale = model_data['length_scale'].item()
+        variance = model_data['variance'].item()
+        sigma_n = model_data['sigma_n'][0]
+        K_train = model_data['K_train']
+
+        n2 = X_train.shape[0]
+        K = np.zeros(n2)
+        X_new = np.array([state[3] + l*math.cos(state[5]) - state[8],state[4] + l*math.sin(state[5]) - state[9], state[5], np.sqrt(state[0]**2+state[1]**2), state[2]])
+
+        for i in range(n2):
+            diff = X_new - X_train[i, :]
+            sqdist = np.dot(diff, diff)
+            K[i] = variance * np.exp(-0.5 * sqdist / length_scale**2)
+                
+        mu = np.dot(K,K_train)
+        print(mu)
+
+
+
+
     # l1_u = np.array([0,0])
     state, V_ship = update_state(state, u0, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
 
     
-    x0 = np.array([state[0], state[1], state[2], state[3] + l*math.cos(state[5]) - state[8], state[4] + l*math.sin(state[5]) - state[9], state[5], state[6], state[7]])
+    x0 = np.array([state[0], state[1], state[2], -(state[3] + l*math.cos(state[5]) - state[8]), -(state[4] + l*math.sin(state[5]) - state[9]), state[5], state[6], state[7]])
 
 
 
