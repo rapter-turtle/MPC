@@ -25,8 +25,8 @@ def plotTrackProj(rel,simX, Nsim, t):
 
     # #Setup plot
     plt.figure()
-    plt.ylim(bottom=-20,top=20)
-    plt.xlim(left=0,right=150)
+    plt.ylim(bottom=-50,top=50)
+    plt.xlim(left=0,right=250)
     plt.ylabel('y[m]')
     plt.xlabel('x[m]')
 
@@ -74,13 +74,11 @@ def plotTrackProj(rel,simX, Nsim, t):
         ax.add_patch(ship_polygon) 
 
     plt.axes().set_aspect('equal')
-    # circle = patches.Circle((obs[0], obs[1]), obs[2], edgecolor='black', facecolor='black', linewidth=0.5, fill=True)
-    # ax.add_patch(circle)
 
 
-def plotRes(simX,simU,t, sim_l1_con, sim_param, sim_x_estim, real, sim_filtered, sim_real_con):
+def plotRes(simX,simU,t, sim_l1_con, sim_param, sim_x_estim, real, sim_filtered):
     # plot results
-    N = 6
+    N = 5
     M = 2
     plt.figure()
     plt.subplot(N, M, 1)
@@ -135,36 +133,24 @@ def plotRes(simX,simU,t, sim_l1_con, sim_param, sim_x_estim, real, sim_filtered,
     plt.plot(t, simX[:,7] )
     plt.ylabel('Tau y mpc')
     plt.xlabel('t')
-    plt.grid(True)     
-    plt.subplot(N, M, 11)
-    plt.plot(t, sim_real_con[:,1] - simX[:,7])
-    plt.ylabel('Tau y l1')
-    plt.xlabel('t')
-    plt.grid(True)     
-    plt.subplot(N, M, 12)
-    plt.plot(t, sim_real_con[:,1])
-    plt.ylabel('Tau y')
-    plt.xlabel('t')
-    plt.grid(True)     
+    plt.grid(True)       
+
 
 
 def current_plot(x, ax, t, state):
     l = 3.5
-    # Extract current state
-    # current_x = x[0][3] - l*math.cos(state[5]) + state[8]
-    # current_y = x[0][4] - l*math.sin(state[5]) + state[9]
-    # current_psi = x[0][5] + state[10]
+
     current_x = state[3]
     current_y = state[4]
     current_psi = state[5]
 
+    Target_current_x = state[8]
+    Target_current_y = state[9]
+    Target_current_psi = 0.0
 
-    current_x2 = state[8] + 3.5*0.5
-    current_y2 = state[9]
-    current_psi2 = 0.0
     # Plot ship's shape polygon according to the current state
     ship_length = 3.5  # Example length of the ship
-    ship_width = 1  # Example width of the ship
+    ship_width = 0.1  # Example width of the ship
 
     # Define ship shape vertices
     ship_vertices = np.array([[current_x - 0.5 * ship_length * np.cos(current_psi) - 0.5 * ship_width * np.sin(current_psi),
@@ -178,26 +164,24 @@ def current_plot(x, ax, t, state):
                                [current_x - 0.5 * ship_length * np.cos(current_psi) + 0.5 * ship_width * np.sin(current_psi),
                                 current_y - 0.5 * ship_length * np.sin(current_psi) - 0.5 * ship_width * np.cos(current_psi)]])
 
-    # fig, ax = plt.subplots(figsize=(12, 8))
-    ship_vertices2 = np.array([[current_x2 - 0.5 * ship_length * np.cos(current_psi2) - 0.5 * ship_width * np.sin(current_psi2),
-                                current_y2 - 0.5 * ship_length * np.sin(current_psi2) + 0.5 * ship_width * np.cos(current_psi2)],
-                               [current_x2 + 0.5 * ship_length * np.cos(current_psi2) - 0.5 * ship_width * np.sin(current_psi2),
-                                current_y2 + 0.5 * ship_length * np.sin(current_psi2) + 0.5 * ship_width * np.cos(current_psi2)],
-                               [current_x2 + 0.8 * ship_length * np.cos(current_psi2),
-                                current_y2 + 0.8 * ship_length * np.sin(current_psi2)], 
-                               [current_x2 + 0.5 * ship_length * np.cos(current_psi2) + 0.5 * ship_width * np.sin(current_psi2),
-                                current_y2 + 0.5 * ship_length * np.sin(current_psi2) - 0.5 * ship_width * np.cos(current_psi2)],
-                               [current_x2 - 0.5 * ship_length * np.cos(current_psi2) + 0.5 * ship_width * np.sin(current_psi2),
-                                current_y2 - 0.5 * ship_length * np.sin(current_psi2) - 0.5 * ship_width * np.cos(current_psi2)]])
 
+    Target_ship_vertices = np.array([[Target_current_x - 0.5 * ship_length * np.cos(Target_current_psi) - 0.5 * ship_width * np.sin(Target_current_psi),
+                                Target_current_y - 0.5 * ship_length * np.sin(Target_current_psi) + 0.5 * ship_width * np.cos(Target_current_psi)],
+                               [Target_current_x + 0.5 * ship_length * np.cos(Target_current_psi) - 0.5 * ship_width * np.sin(Target_current_psi),
+                                Target_current_y + 0.5 * ship_length * np.sin(Target_current_psi) + 0.5 * ship_width * np.cos(Target_current_psi)],
+                               [Target_current_x + 0.8 * ship_length * np.cos(Target_current_psi),
+                                Target_current_y + 0.8 * ship_length * np.sin(Target_current_psi)], 
+                               [Target_current_x + 0.5 * ship_length * np.cos(Target_current_psi) + 0.5 * ship_width * np.sin(Target_current_psi),
+                                Target_current_y + 0.5 * ship_length * np.sin(Target_current_psi) - 0.5 * ship_width * np.cos(Target_current_psi)],
+                               [Target_current_x - 0.5 * ship_length * np.cos(Target_current_psi) + 0.5 * ship_width * np.sin(Target_current_psi),
+                                Target_current_y - 0.5 * ship_length * np.sin(Target_current_psi) - 0.5 * ship_width * np.cos(Target_current_psi)]])
 
 
     # Plot ship's shape polygon
     ship_polygon = Polygon(ship_vertices, closed=True, edgecolor='b', facecolor='b')
     ax.add_patch(ship_polygon)
-
-    ship_polygon2 = Polygon(ship_vertices2, closed=True, edgecolor='g', facecolor='g')
-    ax.add_patch(ship_polygon2)
+    Target_ship_polygon = Polygon(Target_ship_vertices, closed=True, edgecolor='r', facecolor='r')
+    ax.add_patch(Target_ship_polygon)
 
     # Plot the trajectory of (x, y) for the prediction horizon
     predicted_horizon_x = [sub_list[3] for sub_list in x]
@@ -205,35 +189,16 @@ def current_plot(x, ax, t, state):
     ax.plot(predicted_horizon_x -np.cos(state[5]) + state[8], predicted_horizon_y -np.sin(state[5])  + state[9], 'r-', label='Predicted Horizon')
     # Add labels and legend
     ax.grid(True)
-    ax.set_aspect('equal', adjustable='box')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    ax.yaxis.set_major_locator(plt.MultipleLocator(10))
     ax.legend()
     # ax.axis('equal')
     ax.text(0.5, 1.02, f'Time: {t}', fontsize=12, ha='center', va='bottom', transform=ax.transAxes)
-    plt.ylim(bottom=-5,top=15)
-    plt.xlim(left=-10,right=150)
-    # plt.axes().set_aspect('equal')
-    plt.grid(True) 
+    plt.ylim(bottom=-10,top=10)
+    plt.xlim(left=-10,right=200)
     plt.draw() 
-    
     plt.pause(0.001)
 
     
     ax.clear() 
     
-
-def current_estim_plot(current,t):
-    # plot results
-    plt.figure()
-    plt.subplot(2, 1, 1)
-    plt.plot(t, current[:,0])
-    plt.ylabel('current X')
-    plt.xlabel('t')
-    plt.grid(True)
-    plt.subplot(2, 1, 2)
-    plt.plot(t, current[:,1])
-    plt.ylabel('current Y')
-    plt.xlabel('t')
-    plt.grid(True)    
