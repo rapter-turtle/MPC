@@ -105,7 +105,7 @@ for i in range(int(T/dt)):
         current_plot(horizon, ax, round(i*dt,2), state)     
 
 
-    l1_u = np.array([0,0])
+    # l1_u = np.array([0,0])
     nominal_state, V_ship = update_state(nominal_state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
 
     state = nominal_state + np.array([0, 0.25*math.cos(0.5*i*dt), 0, 0, 0.5*math.sin(0.5*i*dt), 0, 0, 0, 0, 0, 0])
