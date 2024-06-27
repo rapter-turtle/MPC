@@ -46,16 +46,15 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
 
     uvr = np.array([uu, v, r])
 
+    direction = 60*math.pi/180
+    wave = 0.05*math.sin(0.2*t) + 0.001*math.sin(1*t+5) + 0.007*math.sin(0.6*t+10)
+    paramy = wave*math.sin(direction)
+    paramx = wave*math.cos(direction)
+    disturbance_x = (paramy*math.sin(psi) + paramx*math.cos(psi))*m
+    disturbance_y = (paramy*math.cos(psi) - paramx*math.sin(psi))*m
 
-
-    # paramy = 0.03*math.sin(0.1*t)
-    # paramx = 0.03*math.sin(0.1*t)
-    # disturbance_x = (paramy*math.sin(psi) + paramx*math.cos(psi))*m
-    # disturbance_y = (paramy*math.cos(psi) - paramx*math.sin(psi))*m
-
-    disturbance_x = 0.0
-    disturbance_y = 0.0  
-
+  
+    dis = np.array([disturbance_x, disturbance_y,-4*(disturbance_y)])
     # l1_u = np.array([-(0.0*math.sin(psi) - 0.01*math.sin(0.1*i*dt)*math.cos(psi))*m,-(0.0*math.cos(psi) + 0.01*math.sin(i*dt*0.1)*math.sin(psi))/(1/m + 4*l/Iz)])
     
     # print(l1_u[0] + disturbance_x)
@@ -76,7 +75,7 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
 
     M_inv = np.linalg.inv(M)
 
-    uvr_dot_bM = (Tau - np.dot(Cv, uvr) - np.dot(D, uvr))
+    uvr_dot_bM = (dis + Tau - np.dot(Cv, uvr) - np.dot(D, uvr))
     uvr_dot = np.dot(M_inv, uvr_dot_bM)
     xypsi_dot = np.dot(R, uvr) 
 
@@ -111,7 +110,8 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
 
 
 
+
     V_ship = np.array([1.0, V_y, 0.0])
 
-    return x_t_plus_1, V_ship
+    return x_t_plus_1, V_ship, Tau
 

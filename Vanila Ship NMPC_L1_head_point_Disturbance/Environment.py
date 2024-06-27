@@ -57,7 +57,7 @@ l1_u = np.array([0.0, 0.0])
 
 sim_x_estim_error = np.ndarray((int(T/dt),6))
 sim_param = np.ndarray((int(T/dt),3))
-sim_l1_con = np.ndarray((int(T/dt),2))
+sim_l1_con = np.ndarray((int(T/dt),3))
 real = np.ndarray((int(T/dt),6))
 sim_filtered = np.ndarray((int(T/dt),3))
 
@@ -105,11 +105,12 @@ for i in range(int(T/dt)):
         current_plot(horizon, ax, round(i*dt,2), state)     
 
 
-    # l1_u = np.array([0,0])
-    nominal_state, V_ship = update_state(nominal_state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
+    l1_u = np.array([0,0])
+    nominal_state, V_ship, tt = update_state(nominal_state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
 
-    state = nominal_state + np.array([0, 0.25*math.cos(0.5*i*dt), 0, 0, 0.5*math.sin(0.5*i*dt), 0, 0, 0, 0, 0, 0])
-    
+    psi = state[5]
+
+    state = nominal_state  
     x0 = np.array([state[0], state[1], state[2], state[3] + l*math.cos(state[5]) - state[8], state[4] + l*math.sin(state[5]) - state[9], state[5], state[6], state[7]])
 
     ############################## L1 Adaptive control ######################################
@@ -151,7 +152,7 @@ for i in range(int(T/dt)):
     l1_u[1] = (filtered_param[1]*math.cos(psi) - filtered_param[0]*math.sin(psi))*(1/m - 4*l/Iz)**(-1)
     
      
-    sim_l1_con[i,:] = l1_u
+    sim_l1_con[i,:] = tt
     sim_param[i,:] = param_estim
     sim_x_estim_error[i,:] = x_estim
     real[i,:] = x_l1

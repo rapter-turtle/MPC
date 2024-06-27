@@ -24,7 +24,7 @@ def plotTrackProj(rel,simX, Nsim, t):
 
 
     # #Setup plot
-    plt.figure()
+    plt.figure(figsize=(10, 5))
     plt.ylim(bottom=-50,top=50)
     plt.xlim(left=0,right=250)
     plt.ylabel('y[m]')
@@ -95,6 +95,7 @@ def plotRes(simX,simU,t, sim_l1_con, sim_param, sim_x_estim, real, sim_filtered)
     plt.plot(t, real[:,1])
     # plt.plot(t, sim_x_estim[:,1])
     plt.ylabel('y distance ')
+    plt.ylim(bottom=-1,top=1)
     plt.xlabel('t')
     plt.grid(True)
     plt.subplot(N, M, 4)
@@ -150,7 +151,7 @@ def current_plot(x, ax, t, state):
 
     # Plot ship's shape polygon according to the current state
     ship_length = 3.5  # Example length of the ship
-    ship_width = 0.1  # Example width of the ship
+    ship_width = 1  # Example width of the ship
 
     # Define ship shape vertices
     ship_vertices = np.array([[current_x - 0.5 * ship_length * np.cos(current_psi) - 0.5 * ship_width * np.sin(current_psi),
@@ -184,18 +185,19 @@ def current_plot(x, ax, t, state):
     ax.add_patch(Target_ship_polygon)
 
     # Plot the trajectory of (x, y) for the prediction horizon
-    predicted_horizon_x = [sub_list[3] for sub_list in x]
-    predicted_horizon_y = [sub_list[4] for sub_list in x]
-    ax.plot(predicted_horizon_x -np.cos(state[5]) + state[8], predicted_horizon_y -np.sin(state[5])  + state[9], 'r-', label='Predicted Horizon')
+    # predicted_horizon_x = [sub_list[3] for sub_list in x]
+    # predicted_horizon_y = [sub_list[4] for sub_list in x]
+    # ax.plot(predicted_horizon_x -np.cos(state[5]) + state[8], predicted_horizon_y -np.sin(state[5])  + state[9], 'r-', label='Predicted Horizon')
     # Add labels and legend
     ax.grid(True)
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    ax.legend()
+    # ax.legend()
     # ax.axis('equal')
     ax.text(0.5, 1.02, f'Time: {t}', fontsize=12, ha='center', va='bottom', transform=ax.transAxes)
+    # plt.figure(figsize=(10, 4))
     plt.ylim(bottom=-10,top=10)
-    plt.xlim(left=-10,right=200)
+    plt.xlim(left=-2,right=100)
     plt.draw() 
     plt.pause(0.001)
 
