@@ -68,9 +68,9 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     paramy = wave_force*math.cos(direction) + windy
     parampsi =  windpsi
 
-    paramx = 0.0
-    paramy = 100.0
-    parampsi =  0.0
+    # paramx = 0.0
+    # paramy = 75.0
+    # parampsi =  0.0
 
 
     disturbance_x = (paramy*math.sin(psi) + paramx*math.cos(psi))
@@ -84,7 +84,7 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     # print(l1_u[0] + disturbance_x)
     # print( l1_u[1] + disturbance_y)
 
-    Tau = np.array([Tau_x  + l1_u[0] + disturbance_x, Tau_y + l1_u[1] + disturbance_y, -4*(Tau_y+ l1_u[1])])
+    Tau = np.array([Tau_x, Tau_y, -4*(Tau_y)])
     Tau = Tau + np.array([u[0], u[1], -4*u[1]])*dt
 
     if Tau[0] > 799.999:

@@ -110,14 +110,14 @@ def simple_model():
     )
 
 
-    disturbance_x = (-py*sin(psi) + px*cos(psi))
-    disturbance_y = (py*cos(psi) + px*sin(psi))
+    disturbance_x = (py*sin(psi) + px*cos(psi))
+    disturbance_y = (py*cos(psi) - px*sin(psi))
 
     dis = vertcat(disturbance_x, disturbance_y, ppsi)
 
     uvr = vertcat(uu, v, r)
     uvr_dot_bM = Tau - D@uvr - Cv@uvr#(Tau - Cv@uvr - D@uvr)
-    uvr_dot = - dis + inv(M)@uvr_dot_bM
+    uvr_dot = dis + inv(M)@uvr_dot_bM
     xypsi_dot = R@uvr
 
 

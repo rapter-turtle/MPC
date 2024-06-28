@@ -43,7 +43,6 @@
 #include "blasfeo/include/blasfeo_d_aux_ext_dep.h"
 
 #define NX     SIMPLE_MODEL_NX
-#define NP     SIMPLE_MODEL_NP
 #define NU     SIMPLE_MODEL_NU
 #define NBX0   SIMPLE_MODEL_NBX0
 

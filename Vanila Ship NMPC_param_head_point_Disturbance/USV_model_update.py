@@ -96,7 +96,7 @@ def h_function(x, eta, x_max):
 
 def param_dynamics(x_error, param_estim, g, input_max):
     
-    P = 0.5*np.eye(6)
+    P = 1.0*np.eye(6)
 
     param_update = -np.dot(np.dot(g, P), x_error)
     

@@ -11,7 +11,7 @@ fig, ax = plt.subplots()
 
 Tf = 50.0  # prediction horizon
 N = 50  # number of discretization steps
-T = 100  # maximum simulation time[s]
+T = 200  # maximum simulation time[s]
 dt = 0.001
 control_time = 1
 
@@ -105,7 +105,7 @@ for i in range(int(T/dt)):
         current_plot(horizon, ax, round(i*dt,2), state)     
 
     # u0 = np.array([0,0])
-    # l1_u = np.array([0,0])
+    l1_u = np.array([0,0])
     nominal_state, V_ship, tt = update_state(nominal_state, u0, l1_u, dt, np.array([0.0,0.0,0]), np.array([1.0,0.0,0]),i*dt)
 
     psi = state[5]
@@ -120,7 +120,7 @@ for i in range(int(T/dt)):
     w_cutoff = 50000000000000
 
     u_mpc = np.array([state[6], state[7]])
-    x_estim =  estim_update_state(x_estim_before, x_error, u_mpc, filtered_param, dt, np.array([px, py, ppsi]), i*dt) #+ np.dot(Am, x_error)  
+    x_estim =  estim_update_state(x_estim_before, x_error, u_mpc, filtered_param, dt, np.array([px, py, ppsi]), i*dt) 
 
     uu = state[0]
     v = state[1]
@@ -135,16 +135,15 @@ for i in range(int(T/dt)):
     
     x_error = x_estim - x_l1
 
-    px = Gamma_x*dt*param_dynamics(x_error, before_px, np.array([0, 0, 1, 0, 0, 0]), 0.05) + before_px
-    py = Gamma_y*dt*param_dynamics(x_error, before_py, np.array([0, 0, 0, 1, 0, 0]), 0.05) + before_py
+    px = Gamma_x*dt*param_dynamics(x_error, before_px, np.array([0, 0, 1, 0, 0, 0]), 0.1) + before_px
+    py = Gamma_y*dt*param_dynamics(x_error, before_py, np.array([0, 0, 0, 1, 0, 0]), 0.1) + before_py
     ppsi = Gamma_psi*dt*param_dynamics(x_error, before_ppsi, np.array([0, 0, 0, 0, 0, 1]), 1000) + before_ppsi
           
 
-    param_estim[0] = px/2
-    param_estim[1] = py/2
-    param_estim[2] = ppsi/2
+    param_estim[0] = px
+    param_estim[1] = py
+    param_estim[2] = ppsi
      
-    print("py : ",py)
 
     for k in range(N+1):
         acados_solver.set(k,"p", np.array([px, py, ppsi]))
