@@ -324,7 +324,7 @@ void simple_model_acados_create_3_create_and_set_functions(simple_model_solver_c
         capsule->__CAPSULE_FNC__.casadi_sparsity_in = & __MODEL_BASE_FNC__ ## _sparsity_in; \
         capsule->__CAPSULE_FNC__.casadi_sparsity_out = & __MODEL_BASE_FNC__ ## _sparsity_out; \
         capsule->__CAPSULE_FNC__.casadi_work = & __MODEL_BASE_FNC__ ## _work; \
-        external_function_param_casadi_create(&capsule->__CAPSULE_FNC__ , 0); \
+        external_function_param_casadi_create(&capsule->__CAPSULE_FNC__ , 3); \
     } while(false)
     // constraints.constr_type == "BGH" and dims.nh > 0
     capsule->nl_constr_h_fun_jac = (external_function_param_casadi *) malloc(sizeof(external_function_param_casadi)*(N-1));
@@ -360,7 +360,14 @@ void simple_model_acados_create_3_create_and_set_functions(simple_model_solver_c
  * Internal function for simple_model_acados_create: step 4
  */
 void simple_model_acados_create_4_set_default_parameters(simple_model_solver_capsule* capsule) {
-    // no parameters defined
+    const int N = capsule->nlp_solver_plan->N;
+    // initialize parameters to nominal value
+    double* p = calloc(NP, sizeof(double));
+
+    for (int i = 0; i <= N; i++) {
+        simple_model_acados_update_params(capsule, i, p, NP);
+    }
+    free(p);
 }
 
 
@@ -1068,7 +1075,7 @@ int simple_model_acados_update_params(simple_model_solver_capsule* capsule, int 
 {
     int solver_status = 0;
 
-    int casadi_np = 0;
+    int casadi_np = 3;
     if (casadi_np != np) {
         printf("acados_update_params: trying to set %i parameters for external functions."
             " External function has %i parameters. Exiting.\n", np, casadi_np);
@@ -1115,7 +1122,7 @@ int simple_model_acados_update_params_sparse(simple_model_solver_capsule * capsu
 {
     int solver_status = 0;
 
-    int casadi_np = 0;
+    int casadi_np = 3;
     if (casadi_np < n_update) {
         printf("simple_model_acados_update_params_sparse: trying to set %d parameters for external functions."
             " External function has %d parameters. Exiting.\n", n_update, casadi_np);
@@ -1130,6 +1137,38 @@ int simple_model_acados_update_params_sparse(simple_model_solver_capsule * capsu
     //     }
     //     printf("param %d value %e\n", idx[i], p[i]);
     // }
+    const int N = capsule->nlp_solver_plan->N;
+    if (stage < N && stage >= 0)
+    {
+        capsule->forw_vde_casadi[stage].set_param_sparse(capsule->forw_vde_casadi+stage, n_update, idx, p);
+        capsule->expl_ode_fun[stage].set_param_sparse(capsule->expl_ode_fun+stage, n_update, idx, p);
+
+        // constraints
+        if (stage == 0)
+        {
+        }
+        else
+        {
+            capsule->nl_constr_h_fun_jac[stage-1].set_param_sparse(capsule->nl_constr_h_fun_jac+stage-1, n_update, idx, p);
+            capsule->nl_constr_h_fun[stage-1].set_param_sparse(capsule->nl_constr_h_fun+stage-1, n_update, idx, p);
+        }
+
+        // cost
+        if (stage == 0)
+        {
+        }
+        else // 0 < stage < N
+        {
+        }
+    }
+
+    else // stage == N
+    {
+        // terminal shooting node has no dynamics
+        // cost
+        // constraints
+    }
+
 
     return solver_status;
 }

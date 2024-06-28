@@ -1,7 +1,7 @@
 {
     "acados_include_path": "/home/user/acados/include",
     "acados_lib_path": "/home/user/acados/lib",
-    "code_export_directory": "/home/user/Experiment Environment/Vanila Ship NMPC_L1_head_point_Disturbance/c_generated_code",
+    "code_export_directory": "/home/user/Experiment Environment/Vanila Ship NMPC_param_head_point_Disturbance/c_generated_code",
     "constraints": {
         "C": [],
         "C_e": [],
@@ -990,7 +990,7 @@
         "nh": 1,
         "nh_0": 0,
         "nh_e": 0,
-        "np": 0,
+        "np": 3,
         "nphi": 0,
         "nphi_0": 0,
         "nphi_e": 0,
@@ -1056,15 +1056,15 @@
         "dyn_disc_fun_jac_hess": null,
         "dyn_ext_fun_type": "casadi",
         "dyn_generic_source": null,
-        "f_expl_expr": "@1=vertcat(uu, v, r), vertcat((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1)))), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control)",
-        "f_impl_expr": "@1=vertcat(uu, v, r), (-vertcat((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1)))), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control))",
+        "f_expl_expr": "@1=vertcat(uu, v, r), vertcat(((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1))))-vertcat(((px*cos(psi))-(py*sin(psi))), ((py*cos(psi))+(px*sin(psi))), ppsi)), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control)",
+        "f_impl_expr": "@1=vertcat(uu, v, r), (-vertcat(((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1))))-vertcat(((px*cos(psi))-(py*sin(psi))), ((py*cos(psi))+(px*sin(psi))), ppsi)), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control))",
         "gnsf": {
             "nontrivial_f_LO": 1,
             "purely_linear": 0
         },
         "name": "simple_model",
         "nu_original": null,
-        "p": "0x0",
+        "p": "vertcat(px, py, ppsi)",
         "t": [],
         "u": "vertcat(Tau_x_dot_control, Tau_y_dot_control)",
         "x": "vertcat(uu, v, r, xx, y, psi, Tau_x, Tau_y)",
@@ -1072,7 +1072,11 @@
         "z": "0x0"
     },
     "name": "simple_model",
-    "parameter_values": [],
+    "parameter_values": [
+        0,
+        0,
+        0
+    ],
     "problem_class": "OCP",
     "shared_lib_ext": ".so",
     "solver_options": {

@@ -68,6 +68,11 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     paramy = wave_force*math.cos(direction) + windy
     parampsi =  windpsi
 
+    paramx = 0.0
+    paramy = 100.0
+    parampsi =  0.0
+
+
     disturbance_x = (paramy*math.sin(psi) + paramx*math.cos(psi))
     disturbance_y = (paramy*math.cos(psi) - paramx*math.sin(psi))
     disturbance_psi = parampsi

@@ -134,7 +134,7 @@ ocp_cython_c: ocp_shared_lib
 	-o acados_ocp_solver_pyx.c \
 	-I $(INCLUDE_PATH)/../interfaces/acados_template/acados_template \
 	$(INCLUDE_PATH)/../interfaces/acados_template/acados_template/acados_ocp_solver_pyx.pyx \
-	-I /home/user/Experiment Environment/Vanila Ship NMPC_L1_head_point_Disturbance/c_generated_code \
+	-I /home/user/Experiment Environment/Vanila Ship NMPC_param_head_point_Disturbance/c_generated_code \
 
 ocp_cython_o: ocp_cython_c
 	$(CC) $(ACADOS_FLAGS) -c -O2 \
@@ -161,7 +161,7 @@ sim_cython_c: sim_shared_lib
 	-o acados_sim_solver_pyx.c \
 	-I $(INCLUDE_PATH)/../interfaces/acados_template/acados_template \
 	$(INCLUDE_PATH)/../interfaces/acados_template/acados_template/acados_sim_solver_pyx.pyx \
-	-I /home/user/Experiment Environment/Vanila Ship NMPC_L1_head_point_Disturbance/c_generated_code \
+	-I /home/user/Experiment Environment/Vanila Ship NMPC_param_head_point_Disturbance/c_generated_code \
 
 sim_cython_o: sim_cython_c
 	$(CC) $(ACADOS_FLAGS) -c -O2 \

@@ -114,10 +114,10 @@ for i in range(int(T/dt)):
     x0 = np.array([state[0], state[1], state[2], state[3] + l*math.cos(state[5]) - state[8], state[4] + l*math.sin(state[5]) - state[9], state[5], state[6], state[7]])
 
     ############################## L1 Adaptive control ######################################
-    Gamma_x = 100000
-    Gamma_y = 100000
-    Gamma_psi = 100000
-    w_cutoff = 50
+    Gamma_x = 10
+    Gamma_y = 10
+    Gamma_psi = 10
+    w_cutoff = 50000000000000
 
     u_mpc = np.array([state[6], state[7]])
     x_estim =  estim_update_state(x_estim_before, x_error, u_mpc, filtered_param, dt, np.array([px, py, ppsi]), i*dt) #+ np.dot(Am, x_error)  
@@ -135,35 +135,20 @@ for i in range(int(T/dt)):
     
     x_error = x_estim - x_l1
 
-    px = Gamma_x*dt*param_dynamics(x_error, before_px, np.array([0, 0, 1, 0, 0, 0]), 0.1) + before_px
-    py = Gamma_y*dt*param_dynamics(x_error, before_py, np.array([0, 0, 0, 1, 0, 0]), 0.1) + before_py
-    ppsi = Gamma_psi*dt*param_dynamics(x_error, before_ppsi, np.array([0, 0, 0, 0, 0, 1]), 0.1) + before_ppsi
+    px = Gamma_x*dt*param_dynamics(x_error, before_px, np.array([0, 0, 1, 0, 0, 0]), 0.05) + before_px
+    py = Gamma_y*dt*param_dynamics(x_error, before_py, np.array([0, 0, 0, 1, 0, 0]), 0.05) + before_py
+    ppsi = Gamma_psi*dt*param_dynamics(x_error, before_ppsi, np.array([0, 0, 0, 0, 0, 1]), 1000) + before_ppsi
           
-    # if px > 0.02:
-    #     px = 0.02
-    # elif px < -0.02:
-    #     px = -0.02
-    # if py > 0.02:
-    #     py = 0.02
-    # elif py < -0.02:
-    #     py = -0.01
-    # if ppsi > 0.1:
-    #     ppsi = 0.1
-    # elif ppsi < -0.1:
-    #     ppsi = -0.1
 
+    param_estim[0] = px/2
+    param_estim[1] = py/2
+    param_estim[2] = ppsi/2
+     
+    print("py : ",py)
 
-    param_estim[0] = px
-    param_estim[1] = py
-    param_estim[2] = ppsi
+    for k in range(N+1):
+        acados_solver.set(k,"p", np.array([px, py, ppsi]))
 
-
-    before_filtered_param = filtered_param
-    filtered_param = before_filtered_param*math.exp(-w_cutoff*dt) - param_estim*(1-math.exp(-w_cutoff*dt))
-
-    l1_u[0] = (filtered_param[1]*math.sin(psi) + filtered_param[0]*math.cos(psi))*m
-    l1_u[1] = (filtered_param[1]*math.cos(psi) - filtered_param[0]*math.sin(psi))*(1/m - 4*l/Iz)**(-1)
-    
      
     sim_l1_con[i,:] = tt
     sim_param[i,:] = param_estim

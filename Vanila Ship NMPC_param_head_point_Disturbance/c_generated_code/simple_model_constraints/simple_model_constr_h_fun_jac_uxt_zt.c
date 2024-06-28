@@ -39,6 +39,7 @@ extern "C" {
 #define casadi_s3 CASADI_PREFIX(s3)
 #define casadi_s4 CASADI_PREFIX(s4)
 #define casadi_s5 CASADI_PREFIX(s5)
+#define casadi_s6 CASADI_PREFIX(s6)
 
 /* Symbol visibility in DLLs */
 #ifndef CASADI_SYMBOL_EXPORT
@@ -83,11 +84,12 @@ void casadi_copy(const casadi_real* x, casadi_int n, casadi_real* y) {
 static const casadi_int casadi_s0[12] = {8, 1, 0, 8, 0, 1, 2, 3, 4, 5, 6, 7};
 static const casadi_int casadi_s1[6] = {2, 1, 0, 2, 0, 1};
 static const casadi_int casadi_s2[3] = {0, 0, 0};
-static const casadi_int casadi_s3[5] = {1, 1, 0, 1, 0};
-static const casadi_int casadi_s4[6] = {10, 1, 0, 2, 6, 7};
-static const casadi_int casadi_s5[3] = {1, 0, 0};
+static const casadi_int casadi_s3[7] = {3, 1, 0, 3, 0, 1, 2};
+static const casadi_int casadi_s4[5] = {1, 1, 0, 1, 0};
+static const casadi_int casadi_s5[6] = {10, 1, 0, 2, 6, 7};
+static const casadi_int casadi_s6[3] = {1, 0, 0};
 
-/* simple_model_constr_h_fun_jac_uxt_zt:(i0[8],i1[2],i2[],i3[])->(o0,o1[10x1,2nz],o2[1x0]) */
+/* simple_model_constr_h_fun_jac_uxt_zt:(i0[8],i1[2],i2[],i3[3])->(o0,o1[10x1,2nz],o2[1x0]) */
 static int casadi_f0(const casadi_real** arg, casadi_real** res, casadi_int* iw, casadi_real* w, int mem) {
   casadi_real *rr, *ss;
   casadi_real w0, w1, w2, w3, *w4=w+4, *w5=w+6;
@@ -194,16 +196,16 @@ CASADI_SYMBOL_EXPORT const casadi_int* simple_model_constr_h_fun_jac_uxt_zt_spar
     case 0: return casadi_s0;
     case 1: return casadi_s1;
     case 2: return casadi_s2;
-    case 3: return casadi_s2;
+    case 3: return casadi_s3;
     default: return 0;
   }
 }
 
 CASADI_SYMBOL_EXPORT const casadi_int* simple_model_constr_h_fun_jac_uxt_zt_sparsity_out(casadi_int i) {
   switch (i) {
-    case 0: return casadi_s3;
-    case 1: return casadi_s4;
-    case 2: return casadi_s5;
+    case 0: return casadi_s4;
+    case 1: return casadi_s5;
+    case 2: return casadi_s6;
     default: return 0;
   }
 }

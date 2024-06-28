@@ -61,10 +61,11 @@ def estim_update_state(x_t, x_error,  u, l1_u, dt, param_estim,t):
 
     et2dot = uu*math.sin(psi) + v*math.cos(psi) + r*l*math.cos(psi)
 
-    et3dot = uvr_dot[0]*math.cos(psi) - uvr_dot[1]*math.sin(psi) - uvr_dot[2]*l*math.sin(psi) - uu*r*math.sin(psi) - v*r*math.cos(psi) - r*r*l*math.cos(psi) + Tau_x*math.cos(psi)/m - (1/m - 4*l/Iz)*Tau_y*math.sin(psi) + param_estim[0] + l1_u[0]
-    
-    et4dot = uvr_dot[0]*math.sin(psi) + uvr_dot[1]*math.cos(psi) + uvr_dot[2]*l*math.cos(psi) + uu*r*math.cos(psi) - v*r*math.sin(psi) - r*r*l*math.sin(psi) + Tau_x*math.sin(psi)/m + (1/m - 4*l/Iz)*Tau_y*math.cos(psi) + param_estim[1] + l1_u[1]
-    
+ 
+    et3dot = uvr_dot[0]*math.cos(psi) - uvr_dot[1]*math.sin(psi) - uvr_dot[2]*l*math.sin(psi) - uu*r*math.sin(psi) - v*r*math.cos(psi) - r*r*l*math.cos(psi) + Tau_x*math.cos(psi)/m - (1/m - 4*l/Iz)*Tau_y*math.sin(psi) + param_estim[0]
+
+    et4dot = uvr_dot[0]*math.sin(psi) + uvr_dot[1]*math.cos(psi) + uvr_dot[2]*l*math.cos(psi) + uu*r*math.cos(psi) - v*r*math.sin(psi) - r*r*l*math.sin(psi) + Tau_x*math.sin(psi)/m + (1/m - 4*l/Iz)*Tau_y*math.cos(psi) + param_estim[1]
+
 
     Am = -np.eye(6)
 
