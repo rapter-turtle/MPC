@@ -65,12 +65,6 @@ def estim_update_state(x_t, x_error,  u, l1_u, dt, param_estim,t):
 
 
 
-
-
-
-
-
-
 def h_function(x, eta, x_max):
     h = x*x - (x_max*x_max)
 

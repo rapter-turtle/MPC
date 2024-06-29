@@ -24,7 +24,7 @@ def plotTrackProj(rel,simX, Nsim, t):
 
 
     # #Setup plot
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(50, 5))
     plt.ylim(bottom=-50,top=50)
     plt.xlim(left=0,right=250)
     plt.ylabel('y[m]')
@@ -196,8 +196,13 @@ def current_plot(x, ax, t, state):
     # ax.axis('equal')
     ax.text(0.5, 1.02, f'Time: {t}', fontsize=12, ha='center', va='bottom', transform=ax.transAxes)
     # plt.figure(figsize=(10, 4))
-    plt.ylim(bottom=-10,top=10)
-    plt.xlim(left=-2,right=100)
+    # plt.figure(figsize=(20, 2))
+    plt.axis('tight')
+    plt.axis('equal')
+    
+    plt.ylim(bottom=-20,top=20)
+    plt.xlim(left=-2,right=150)
+    
     plt.draw() 
     plt.pause(0.001)
 

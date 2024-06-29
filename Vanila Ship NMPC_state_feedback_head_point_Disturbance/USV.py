@@ -62,7 +62,7 @@ def update_state(x_t, u, l1_u, dt, V, V_t,t):
     windy = Al*wind_rv**2*0.8*math.sin(gamma)
     windpsi = Af*wind_rv**2*0.2*math.sin(2*gamma)
 
-    wave_force = 0.0#40.0*math.cos(0.5*t) + 10.0*math.cos(1*t) + 70.0*math.cos(0.2*t) 
+    wave_force = 30.0*math.cos(0.5*t) + 10.0*math.cos(1*t) + 60.0*math.cos(0.2*t) 
 
     paramx = wave_force*math.sin(direction) + windx
     paramy = wave_force*math.cos(direction) + windy

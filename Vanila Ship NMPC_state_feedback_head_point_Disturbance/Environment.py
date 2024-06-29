@@ -7,11 +7,11 @@ from simple_acados_settings_dev import *
 from simple_plotFcn import *
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(15, 2))
 
 Tf = 50.0  # prediction horizon
 N = 50  # number of discretization steps
-T = 100  # maximum simulation time[s]
+T = 150  # maximum simulation time[s]
 dt = 0.001
 control_time = 1
 
@@ -61,6 +61,7 @@ sim_l1_con = np.ndarray((int(T/dt),3))
 real = np.ndarray((int(T/dt),6))
 sim_filtered = np.ndarray((int(T/dt),3))
 
+
 px = 0.0
 py = 0.0
 ppsi = 0.0
@@ -74,9 +75,9 @@ for i in range(int(T/dt)):
         # print(i)
         ################################ update reference ################################
         for j in range(N):
-            yref = np.array([0, 0, 0, -3.5*0.5, 0, 0, 0, 0, 0, 0])
+            yref = np.array([0, 0, 0, -3.5, 0, 0, 0, 0, 0, 0])
             acados_solver.set(j, "yref", yref)
-        yref_N = np.array([0, 0, 0, -3.5*0.5, 0, 0, 0, 0])
+        yref_N = np.array([0, 0, 0, -3.5, 0, 0, 0, 0])
         acados_solver.set(N, "yref", yref_N)
         ##################################################################################
 
@@ -122,28 +123,33 @@ for i in range(int(T/dt)):
     v = state[1]
     r = state[2] 
     psi = state[5]
-    x_l1 = np.array([state[3],                              ## et1
-                     state[4],                              ## et2
-                     state[0],      ## et3
-                     state[1],      ## et4
+    x_l1 = np.array([state[3],                              
+                     state[4],                              
+                     state[0],      
+                     state[1],      
+                     psi,                                                                     
+                     r])                                                                      
+    x_ss = np.array([state[3] + l*math.cos(state[5]) - state[8],                              ## et1
+                     state[4] + l*math.sin(state[5]) - state[9],                              ## et2
+                     uu*math.cos(psi) - v*math.sin(psi) - r*l*math.sin(psi) - V_ship[0],      ## et3
+                     uu*math.sin(psi) + v*math.cos(psi) + r*l*math.cos(psi) - V_ship[1],      ## et4
                      psi,                                                                     ## psi
-                     r])                                                                      ## r
-    
+                     r])     
 
     x_error = x_estim - x_l1
      
-    PID_X = -30.0*(state[3] + l*math.cos(state[5]) - state[8])
-    PID_Y = -70.0*(state[4] + l*math.sin(state[5]) - state[9])
+    PID_X = -5.0*(x_error[0]) - 40.0*(x_error[2])
+    PID_Y = -5.0*(x_error[1]) - 20.0*(x_error[3])
 
-    l1_u[0] = (PID_Y*math.sin(psi) + PID_X*math.cos(psi))
-    l1_u[1] = (PID_Y*math.cos(psi) - PID_X*math.sin(psi))
+    l1_u[0] = PID_X#(PID_Y*math.sin(psi) + PID_X*math.cos(psi))
+    l1_u[1] = PID_Y#(PID_Y*math.cos(psi) - PID_X*math.sin(psi))
 
     print("y  : ",PID_Y)
      
     sim_l1_con[i,:] = tt
     sim_param[i,:] = param_estim
     sim_x_estim_error[i,:] = x_estim
-    real[i,:] = x_l1
+    real[i,:] = x_ss
     sim_filtered[i,:] = -filtered_param
 
     before_px = px

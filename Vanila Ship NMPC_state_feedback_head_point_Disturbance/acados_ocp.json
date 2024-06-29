@@ -1,7 +1,7 @@
 {
-    "acados_include_path": "/home/kiyong/acados/include",
-    "acados_lib_path": "/home/kiyong/acados/lib",
-    "code_export_directory": "/home/kiyong/Kiyong/MPC/Experiment Environment/Vanila Ship NMPC_state_feedback_head_point_Disturbance/c_generated_code",
+    "acados_include_path": "/home/user/acados/include",
+    "acados_lib_path": "/home/user/acados/lib",
+    "code_export_directory": "/home/user/Experiment Environment/Vanila Ship NMPC_state_feedback_head_point_Disturbance/c_generated_code",
     "constraints": {
         "C": [],
         "C_e": [],
@@ -975,7 +975,7 @@
         "zu_e": []
     },
     "cython_include_dirs": [
-        "/home/kiyong/.local/lib/python3.8/site-packages/numpy/core/include",
+        "/home/user/.local/lib/python3.8/site-packages/numpy/core/include",
         "/usr/include/python3.8"
     ],
     "dims": {
@@ -1056,8 +1056,8 @@
         "dyn_disc_fun_jac_hess": null,
         "dyn_ext_fun_type": "casadi",
         "dyn_generic_source": null,
-        "f_expl_expr": "@1=vertcat(uu, v, r), vertcat(mac(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]],((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1))),zeros(3x1)), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control)",
-        "f_impl_expr": "@1=vertcat(uu, v, r), (-vertcat(mac(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]],((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1))),zeros(3x1)), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control))",
+        "f_expl_expr": "@1=vertcat(uu, v, r), vertcat((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1)))), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control)",
+        "f_impl_expr": "@1=vertcat(uu, v, r), (-vertcat((nonzeros(\n[[0.000251256, 00, 00], \n [00, 0.000251256, 00], \n [00, 00, 5.07537e-05]])*((vertcat(Tau_x, Tau_y, (-4*Tau_y))-mac(\n[[50, -0, -0], \n [-0, 200, -0], \n [-0, -0, 1281]],@1,zeros(3x1)))-mac(horzcat(horzcat(0, 0, (-3980*v))', horzcat(0, 0, (3980*uu))', horzcat((3980*v), (-3980*uu), 0)')',@1,zeros(3x1)))), ((((uu*cos(psi))-(v*sin(psi)))-((3.5*r)*sin(psi)))-1), (((uu*sin(psi))+(v*cos(psi)))+((3.5*r)*cos(psi))), r, Tau_x_dot_control, Tau_y_dot_control))",
         "gnsf": {
             "nontrivial_f_LO": 1,
             "purely_linear": 0
@@ -1079,6 +1079,8 @@
         "Tsim": 1.0,
         "alpha_min": 0.05,
         "alpha_reduction": 0.7,
+        "as_rti_iter": 1,
+        "as_rti_level": 4,
         "collocation_type": "GAUSS_LEGENDRE",
         "cost_discretization": "EULER",
         "custom_templates": [],
@@ -1124,6 +1126,7 @@
         "qp_solver_warm_start": 0,
         "reg_epsilon": 0.0001,
         "regularize_method": "NO_REGULARIZE",
+        "rti_log_residuals": 0,
         "shooting_nodes": [
             0.0,
             1.0,
@@ -1387,7 +1390,9 @@
             1.0,
             1.0,
             1.0
-        ]
+        ],
+        "with_solution_sens_wrt_params": false,
+        "with_value_sens_wrt_params": false
     },
     "zoro_description": null
 }
